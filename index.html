@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Parte de Visita Inmobiliaria</title>
+  
+  <!-- Estilos CSS integrados -->
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; padding: 15px; }
+    .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    h1 { font-size: 1.4rem; color: #1a2b4c; margin-bottom: 15px; text-align: center; }
+    .section-title { font-size: 1rem; color: #1a2b4c; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; margin: 15px 0 10px 0; font-weight: bold; }
+    
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: #4a5568; }
+    input, textarea { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; }
+    input:focus, textarea:focus { border-color: #3182ce; outline: none; }
+    
+    .legal-text { font-size: 0.75rem; color: #4a5568; background: #edf2f7; padding: 10px; border-radius: 6px; text-align: justify; margin-bottom: 15px; line-height: 1.3; }
+    
+    .signature-container { border: 2px dashed #cbd5e0; border-radius: 6px; background: #fafafa; position: relative; margin-bottom: 10px; }
+    canvas { width: 100%; height: 180px; display: block; touch-action: none; }
+    
+    .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+    button { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.95rem; cursor: pointer; }
+    .btn-clear { background: #e2e8f0; color: #4a5568; }
+    .btn-submit { background: #2b6cb0; color: white; }
+    button:active { opacity: 0.85; }
+  </style>
+
+  <!-- Librerías externas libres (CDNs) -->
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h1>Hoja de Visita a Inmueble</h1>
+
+  <form id="visitaForm">
+    <div class="section-title">Datos del Inmueble y Fecha</div>
+    <label for="fecha">Fecha y Hora</label>
+    <input type="datetime-local" id="fecha" required>
+
+    <label for="direccion">Dirección de la Vivienda Visitada</label>
+    <input type="text" id="direccion" placeholder="Ej: Calle Gran Vía 12, 3º B" required>
+
+    <div class="section-title">Datos del Visitante / Cliente</div>
+    <label for="nombre">Nombre y Apellidos</label>
+    <input type="text" id="nombre" placeholder="Nombre completo del visitante" required>
+
+    <label for="dni">DNI / NIE / Pasaporte</label>
+    <input type="text" id="dni" placeholder="12345678X" required>
+
+    <label for="telefono">Teléfono</label>
+    <input type="tel" id="telefono" placeholder="600 000 000" required>
+
+    <div class="section-title">Reconocimiento e Intermediación</div>
+    <div class="legal-text">
+      El cliente abajo firmante reconoce haber visitado el inmueble referenciado a través de las gestiones de intermediación de la agencia. El cliente se compromete a realizar la adquisición o arrendamiento de dicha finca exclusivamente a través de esta agencia, reconociendo el derecho de la misma a percibir los honorarios profesionales acordados en caso de perfeccionarse la operación.
+    </div>
+
+    <label>Firma del Cliente sobre la pantalla:</label>
+    <div class="signature-container">
+      <canvas id="signature-pad"></canvas>
+    </div>
+
+    <div class="btn-group">
+      <button type="button" class="btn-clear" id="clearBtn">Borrar Firma</button>
+      <button type="submit" class="btn-submit">Generar PDF</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Inicialización de la fecha actual en el formulario
+  document.getElementById('fecha').value = new Date().toISOString().slice(0, 16);
+
+  // Inicializar Signature Pad
+  const canvas = document.getElementById('signature-pad');
+  
+  function resizeCanvas() {
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    canvas.getContext("2d").scale(ratio, ratio);
+  }
+  
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+
+  const signaturePad = new SignaturePad(canvas, {
+    backgroundColor: 'rgba(255, 255, 255, 0)',
+    penColor: 'rgb(0, 0, 128)'
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    signaturePad.clear();
+  });
+
+  // Generación del documento PDF
+  document.getElementById('visitaForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    if (signaturePad.isEmpty()) {
+      alert("Por favor, pida al cliente que firme el documento antes de continuar.");
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Variables del formulario
+    const fecha = document.getElementById('fecha').value.replace('T', ' ');
+    const direccion = document.getElementById('direccion').value;
+    const nombre = document.getElementById('nombre').value;
+    const dni = document.getElementById('dni').value;
+    const telefono = document.getElementById('telefono').value;
+    const signatureData = signaturePad.toDataURL();
+
+    // Diseño del PDF
+    doc.setFontSize(18);
+    doc.setTextColor(26, 43, 76);
+    doc.text("PARTE DE VISITA A INMUEBLE", 105, 20, null, null, "center");
+
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Fecha y Hora: ${fecha}`, 14, 32);
+
+    doc.setLineWidth(0.5);
+    doc.setDrawColor(200);
+    doc.line(14, 36, 196, 36);
+
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.setFont(undefined, 'bold');
+    doc.text("DATOS DEL INMUEBLE VISITADO", 14, 46);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Dirección: ${direccion}`, 14, 54);
+
+    doc.setFont(undefined, 'bold');
+    doc.text("DATOS DEL VISITANTE / COMPRADOR", 14, 68);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Nombre completo: ${nombre}`, 14, 76);
+    doc.text(`DNI / NIE: ${dni}`, 14, 84);
+    doc.text(`Teléfono: ${telefono}`, 14, 92);
+
+    doc.setFont(undefined, 'bold');
+    doc.text("ACUERDO DE INTERMEDIACIÓN Y CLÁUSULA LEGAL", 14, 106);
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(9);
+    
+    const textoLegal = "El abajo firmante declara que ha visitado en la fecha indicadas el inmueble arriba referenciado a través de las gestiones de intermediación inmobiliaria de la agencia. El visitante reconoce que la información y el acceso al inmueble le han sido facilitados por la agencia y se compromete a no realizar la compra, alquiler o cualquier transacción sobre dicho inmueble directamente con la propiedad ni mediante terceros, sino únicamente con la intermediación de esta agencia, aceptando los honorarios profesionales correspondientes en caso de concretarse la operación.";
+    
+    const splitText = doc.splitTextToSize(textoLegal, 180);
+    doc.text(splitText, 14, 114);
+
+    // Añadir Firma
+    doc.setFontSize(11);
+    doc.setFont(undefined, 'bold');
+    doc.text("Firma del Cliente / Visitante:", 14, 160);
+    doc.addImage(signatureData, 'PNG', 14, 165, 70, 35);
+
+    // Nombre del archivo PDF
+    const fileName = `Parte_Visita_${nombre.replace(/\s+/g, '_')}_${dni}.pdf`;
+
+    // Intentar abrir el menú nativo del móvil para compartir/guardar
+    const pdfBlob = doc.output('blob');
+    const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: 'Parte de Visita Firmado',
+          text: `Adjunto el parte de visita firmado por ${nombre}.`
+        });
+      } catch (err) {
+        // Si el usuario cancela la acción de compartir, simplemente se descarga el archivo
+        doc.save(fileName);
+      }
+    } else {
+      // Descarga tradicional en navegador si la API Share no está disponible
+      doc.save(fileName);
+    }
+  });
+</script>
+
+</body>
+</html>
