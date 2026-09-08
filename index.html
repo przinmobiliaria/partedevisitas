@@ -3,169 +3,273 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Parte de Visita Inmobiliaria</title>
+  <title>PRZ Inmobiliaria - Parte de Visita</title>
   
-  <!-- Estilos CSS integrados -->
+  <!-- Tipografía Josefin Sans desde Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: #f4f6f8; color: #333; padding: 15px; }
-    .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-    h1 { font-size: 1.4rem; color: #1a2b4c; margin-bottom: 15px; text-align: center; }
-    .section-title { font-size: 1rem; color: #1a2b4c; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; margin: 15px 0 10px 0; font-weight: bold; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: #f0f4f8; color: #2d3748; padding: 15px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    
+    .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+    
+    /* Branding PRZ Inmobiliaria */
+    .brand-header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+    .brand-title { font-family: 'Josefin Sans', sans-serif; font-weight: 700; font-size: 2rem; color: #1a2b4c; letter-spacing: 2px; text-transform: uppercase; }
+    .brand-subtitle { font-family: 'Josefin Sans', sans-serif; font-weight: 400; font-size: 0.9rem; color: #4a5568; letter-spacing: 3px; text-transform: uppercase; margin-top: 2px; }
+    .doc-title { font-size: 1.1rem; color: #2b6cb0; margin-top: 10px; font-weight: 600; }
+
+    .section-title { font-size: 0.95rem; color: #1a2b4c; border-bottom: 2px solid #edf2f7; padding-bottom: 5px; margin: 20px 0 12px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     
     label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: #4a5568; }
-    input, textarea { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; }
-    input:focus, textarea:focus { border-color: #3182ce; outline: none; }
+    input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 0.95rem; background: #f8fafc; }
+    input:focus { border-color: #2b6cb0; outline: none; background: #fff; }
     
-    .legal-text { font-size: 0.75rem; color: #4a5568; background: #edf2f7; padding: 10px; border-radius: 6px; text-align: justify; margin-bottom: 15px; line-height: 1.3; }
+    .visitor-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; margin-bottom: 20px; position: relative; }
+    .visitor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .visitor-number { font-family: 'Josefin Sans', sans-serif; font-weight: 600; color: #2b6cb0; }
+    .btn-remove { background: #e53e3e; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+
+    .legal-text { font-size: 0.75rem; color: #4a5568; background: #edf2f7; padding: 12px; border-radius: 8px; text-align: justify; margin-bottom: 15px; line-height: 1.4; }
     
-    .signature-container { border: 2px dashed #cbd5e0; border-radius: 6px; background: #fafafa; position: relative; margin-bottom: 10px; }
-    canvas { width: 100%; height: 180px; display: block; touch-action: none; }
+    .signature-container { border: 2px dashed #cbd5e0; border-radius: 8px; background: #fff; position: relative; margin-bottom: 8px; }
+    canvas { width: 100%; height: 160px; display: block; touch-action: none; }
     
-    .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-    button { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.95rem; cursor: pointer; }
-    .btn-clear { background: #e2e8f0; color: #4a5568; }
-    .btn-submit { background: #2b6cb0; color: white; }
-    button:active { opacity: 0.85; }
+    .btn-clear-sig { background: #edf2f7; color: #4a5568; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; margin-bottom: 10px; display: block; margin-left: auto; }
+    
+    .btn-add-visitor { width: 100%; background: #e2e8f0; color: #2d3748; padding: 12px; border: 2px dashed #cbd5e0; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-bottom: 20px; transition: 0.2s; }
+    .btn-add-visitor:active { background: #cbd5e0; }
+
+    .btn-submit { width: 100%; background: #1a2b4c; color: white; padding: 14px; border: none; border-radius: 8px; font-family: 'Josefin Sans', sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 12px rgba(26, 43, 76, 0.25); }
+    .btn-submit:active { opacity: 0.9; }
   </style>
 
-  <!-- Librerías externas libres (CDNs) -->
+  <!-- Librerías dinámicas necesarias -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
 <div class="container">
-  <h1>Hoja de Visita a Inmueble</h1>
+  <!-- Cabecera de Marca -->
+  <div class="brand-header">
+    <div class="brand-title">PRZ</div>
+    <div class="brand-subtitle">Inmobiliaria</div>
+    <div class="doc-title">Parte de Visita a Inmueble</div>
+  </div>
 
   <form id="visitaForm">
-    <div class="section-title">Datos del Inmueble y Fecha</div>
+    <div class="section-title">Inmueble y Fecha</div>
     <label for="fecha">Fecha y Hora</label>
     <input type="datetime-local" id="fecha" required>
 
     <label for="direccion">Dirección de la Vivienda Visitada</label>
     <input type="text" id="direccion" placeholder="Ej: Calle Gran Vía 12, 3º B" required>
 
-    <div class="section-title">Datos del Visitante / Cliente</div>
-    <label for="nombre">Nombre y Apellidos</label>
-    <input type="text" id="nombre" placeholder="Nombre completo del visitante" required>
+    <div class="section-title">Compradores / Visitantes</div>
+    
+    <!-- Contenedor donde se añadirán los visitantes dinámicamente -->
+    <div id="visitors-container"></div>
 
-    <label for="dni">DNI / NIE / Pasaporte</label>
-    <input type="text" id="dni" placeholder="12345678X" required>
+    <button type="button" class="btn-add-visitor" id="addVisitorBtn">+ Añadir otro comprador / visitante</button>
 
-    <label for="telefono">Teléfono</label>
-    <input type="tel" id="telefono" placeholder="600 000 000" required>
-
-    <div class="section-title">Reconocimiento e Intermediación</div>
+    <div class="section-title">Cláusula de Intermediación</div>
     <div class="legal-text">
-      El cliente abajo firmante reconoce haber visitado el inmueble referenciado a través de las gestiones de intermediación de la agencia. El cliente se compromete a realizar la adquisición o arrendamiento de dicha finca exclusivamente a través de esta agencia, reconociendo el derecho de la misma a percibir los honorarios profesionales acordados del 3% + IVA en caso de perfeccionarse la operación.
+      Los abajo firmantes declaran que han visitado la finca arriba referenciada a través de la intermediación de <b>PRZ Inmobiliaria</b>. Los visitantes se comprometen a no realizar la adquisición o arrendamiento del inmueble directamente con la propiedad ni a través de terceros distintos a esta agencia, reconociendo el derecho de PRZ Inmobiliaria a percibir los honorarios profesionales acordados en caso de formalizarse la operación.
     </div>
 
-    <label>Firma del Cliente sobre la pantalla:</label>
-    <div class="signature-container">
-      <canvas id="signature-pad"></canvas>
-    </div>
-
-    <div class="btn-group">
-      <button type="button" class="btn-clear" id="clearBtn">Borrar Firma</button>
-      <button type="submit" class="btn-submit">Generar PDF</button>
-    </div>
+    <button type="submit" class="btn-submit">Generar PDF Firmado</button>
   </form>
 </div>
 
 <script>
-  // Inicialización de la fecha actual en el formulario
+  // Inicialización de la fecha
   document.getElementById('fecha').value = new Date().toISOString().slice(0, 16);
 
-  // Inicializar Signature Pad
-  const canvas = document.getElementById('signature-pad');
-  
-  function resizeCanvas() {
+  const visitorsContainer = document.getElementById('visitors-container');
+  const addVisitorBtn = document.getElementById('addVisitorBtn');
+  let visitorCount = 0;
+  const signaturePads = [];
+
+  // Función para añadir una tarjeta de visitante con su firma
+  function addVisitor() {
+    visitorCount++;
+    const index = visitorCount - 1;
+
+    const card = document.createElement('div');
+    card.className = 'visitor-card';
+    card.id = `visitor-card-${index}`;
+
+    card.innerHTML = `
+      <div class="visitor-header">
+        <span class="visitor-number">Visitante #${visitorCount}</span>
+        ${visitorCount > 1 ? `<button type="button" class="btn-remove" onclick="removeVisitor(${index})">Eliminar</button>` : ''}
+      </div>
+      <label>Nombre y Apellidos</label>
+      <input type="text" class="v-nombre" placeholder="Nombre completo" required>
+
+      <label>DNI / NIE / Pasaporte</label>
+      <input type="text" class="v-dni" placeholder="12345678X" required>
+
+      <label>Teléfono</label>
+      <input type="tel" class="v-telefono" placeholder="600 000 000" required>
+
+      <label>Firma táctil sobre la pantalla:</label>
+      <div class="signature-container">
+        <canvas id="canvas-${index}"></canvas>
+      </div>
+      <button type="button" class="btn-clear-sig" onclick="clearSignature(${index})">Borrar Firma</button>
+    `;
+
+    visitorsContainer.appendChild(card);
+
+    // Ajustar resolución del Canvas de Firma
+    const canvas = document.getElementById(`canvas-${index}`);
     const ratio = Math.max(window.devicePixelRatio || 1, 1);
     canvas.width = canvas.offsetWidth * ratio;
     canvas.height = canvas.offsetHeight * ratio;
     canvas.getContext("2d").scale(ratio, ratio);
+
+    // Inicializar Pad de firma para este visitante
+    const pad = new SignaturePad(canvas, {
+      backgroundColor: 'rgba(255, 255, 255, 0)',
+      penColor: 'rgb(26, 43, 76)' // Color azul corporativo
+    });
+
+    signaturePads[index] = pad;
   }
-  
-  window.addEventListener("resize", resizeCanvas);
-  resizeCanvas();
 
-  const signaturePad = new SignaturePad(canvas, {
-    backgroundColor: 'rgba(255, 255, 255, 0)',
-    penColor: 'rgb(0, 0, 128)'
-  });
+  function clearSignature(index) {
+    if (signaturePads[index]) {
+      signaturePads[index].clear();
+    }
+  }
 
-  document.getElementById('clearBtn').addEventListener('click', () => {
-    signaturePad.clear();
-  });
+  function removeVisitor(index) {
+    const card = document.getElementById(`visitor-card-${index}`);
+    if (card) {
+      card.remove();
+      signaturePads[index] = null;
+    }
+  }
 
-  // Generación del documento PDF
+  // Añadir primer visitante por defecto al cargar
+  addVisitor();
+
+  addVisitorBtn.addEventListener('click', addVisitor);
+
+  // Generar PDF al enviar el formulario
   document.getElementById('visitaForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    if (signaturePad.isEmpty()) {
-      alert("Por favor, pida al cliente que firme el documento antes de continuar.");
+    // Validar que todas las firmas visibles estén rellenas
+    const cards = document.querySelectorAll('.visitor-card');
+    let allSigned = true;
+
+    cards.forEach((card) => {
+      const id = card.id.replace('visitor-card-', '');
+      if (signaturePads[id] && signaturePads[id].isEmpty()) {
+        allSigned = false;
+      }
+    });
+
+    if (!allSigned) {
+      alert("Por favor, asegúrese de que todos los visitantes añadidos hayan firmado sobre la pantalla.");
       return;
     }
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Variables del formulario
     const fecha = document.getElementById('fecha').value.replace('T', ' ');
     const direccion = document.getElementById('direccion').value;
-    const nombre = document.getElementById('nombre').value;
-    const dni = document.getElementById('dni').value;
-    const telefono = document.getElementById('telefono').value;
-    const signatureData = signaturePad.toDataURL();
 
-    // Diseño del PDF
-    doc.setFontSize(18);
+    // Encabezado Corporativo PDF
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
     doc.setTextColor(26, 43, 76);
-    doc.text("PARTE DE VISITA A INMUEBLE", 105, 20, null, null, "center");
+    doc.text("PRZ INMOBILIARIA", 105, 20, null, null, "center");
 
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor(100);
-    doc.text(`Fecha y Hora: ${fecha}`, 14, 32);
+    doc.text("PARTE DE VISITA E INTERMEDIACIÓN", 105, 26, null, null, "center");
+
+    doc.setFontSize(9);
+    doc.text(`Fecha y Hora: ${fecha}`, 14, 35);
 
     doc.setLineWidth(0.5);
     doc.setDrawColor(200);
-    doc.line(14, 36, 196, 36);
+    doc.line(14, 38, 196, 38);
 
-    doc.setFontSize(12);
-    doc.setTextColor(0);
-    doc.setFont(undefined, 'bold');
-    doc.text("DATOS DEL INMUEBLE VISITADO", 14, 46);
-    doc.setFont(undefined, 'normal');
-    doc.text(`Dirección: ${direccion}`, 14, 54);
-
-    doc.setFont(undefined, 'bold');
-    doc.text("DATOS DEL VISITANTE / COMPRADOR", 14, 68);
-    doc.setFont(undefined, 'normal');
-    doc.text(`Nombre completo: ${nombre}`, 14, 76);
-    doc.text(`DNI / NIE: ${dni}`, 14, 84);
-    doc.text(`Teléfono: ${telefono}`, 14, 92);
-
-    doc.setFont(undefined, 'bold');
-    doc.text("ACUERDO DE INTERMEDIACIÓN Y CLÁUSULA LEGAL", 14, 106);
-    doc.setFont(undefined, 'normal');
-    doc.setFontSize(9);
-    
-    const textoLegal = "El abajo firmante declara que ha visitado en la fecha indicadas el inmueble arriba referenciado a través de las gestiones de intermediación inmobiliaria de la agencia. El visitante reconoce que la información y el acceso al inmueble le han sido facilitados por la agencia y se compromete a no realizar la compra, alquiler o cualquier transacción sobre dicho inmueble directamente con la propiedad ni mediante terceros, sino únicamente con la intermediación de esta agencia, aceptando los honorarios profesionales correspondientes en caso de concretarse la operación.";
-    
-    const splitText = doc.splitTextToSize(textoLegal, 180);
-    doc.text(splitText, 14, 114);
-
-    // Añadir Firma
+    // Datos Inmueble
     doc.setFontSize(11);
-    doc.setFont(undefined, 'bold');
-    doc.text("Firma del Cliente / Visitante:", 14, 160);
-    doc.addImage(signatureData, 'PNG', 14, 165, 70, 35);
+    doc.setTextColor(26, 43, 76);
+    doc.setFont("helvetica", "bold");
+    doc.text("DATOS DEL INMUEBLE VISITADO", 14, 46);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(0);
+    doc.text(`Dirección: ${direccion}`, 14, 53);
 
-    // Nombre del archivo PDF
-    const fileName = `Parte_Visita_${nombre.replace(/\s+/g, '_')}_${dni}.pdf`;
+    // Texto Legal
+    doc.setFontSize(11);
+    doc.setTextColor(26, 43, 76);
+    doc.setFont("helvetica", "bold");
+    doc.text("CLÁUSULA DE RECONOCIMIENTO E INTERMEDIACIÓN", 14, 65);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.setTextColor(60);
+    const textoLegal = "Los abajo firmantes declaran que han visitado la finca arriba referenciada a través de las gestiones de intermediación de PRZ Inmobiliaria. Los visitantes reconocen que la información y acceso al inmueble les han sido facilitados por la agencia y se comprometen a no realizar la adquisición o arrendamiento de dicha propiedad directamente con los titulares ni mediante terceros, sino únicamente con la intermediación de PRZ Inmobiliaria, aceptando los honorarios profesionales correspondientes en caso de concretarse la operación.";
+    const splitText = doc.splitTextToSize(textoLegal, 182);
+    doc.text(splitText, 14, 72);
 
-    // Intentar abrir el menú nativo del móvil para compartir/guardar
+    // Recopilar y dibujar compradores/firmas
+    let yPos = 100;
+    doc.setFontSize(11);
+    doc.setTextColor(26, 43, 76);
+    doc.setFont("helvetica", "bold");
+    doc.text("DATOS DE LOS VISITANTES Y FIRMAS", 14, yPos);
+    
+    yPos += 8;
+
+    let primerNombre = "";
+
+    cards.forEach((card, i) => {
+      const nombre = card.querySelector('.v-nombre').value;
+      const dni = card.querySelector('.v-dni').value;
+      const telefono = card.querySelector('.v-telefono').value;
+      const id = card.id.replace('visitor-card-', '');
+      const signatureData = signaturePads[id].toDataURL();
+
+      if (i === 0) primerNombre = nombre;
+
+      // Salto de página automático si hay muchos firmantes
+      if (yPos > 240) {
+        doc.addPage();
+        yPos = 20;
+      }
+
+      doc.setFontSize(9.5);
+      doc.setTextColor(0);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Visitante #${i + 1}: ${nombre}`, 14, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(`DNI: ${dni}  |  Teléfono: ${telefono}`, 14, yPos + 5);
+
+      // Dibujar caja e imagen de firma
+      doc.setDrawColor(220);
+      doc.rect(14, yPos + 8, 70, 28);
+      doc.addImage(signatureData, 'PNG', 14, yPos + 8, 70, 28);
+
+      yPos += 42;
+    });
+
+    // Guardar/Compartir PDF
+    const fileName = `Parte_Visita_PRZ_${primerNombre.replace(/\s+/g, '_')}.pdf`;
     const pdfBlob = doc.output('blob');
     const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
 
@@ -173,15 +277,13 @@
       try {
         await navigator.share({
           files: [file],
-          title: 'Parte de Visita Firmado',
-          text: `Adjunto el parte de visita firmado por ${nombre}.`
+          title: 'Parte de Visita - PRZ Inmobiliaria',
+          text: `Parte de visita firmado para la propiedad en ${direccion}.`
         });
       } catch (err) {
-        // Si el usuario cancela la acción de compartir, simplemente se descarga el archivo
         doc.save(fileName);
       }
     } else {
-      // Descarga tradicional en navegador si la API Share no está disponible
       doc.save(fileName);
     }
   });
